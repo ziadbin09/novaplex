@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Opening in NovaPlex…</title>
+  <style>
+    body { font-family: sans-serif; background: #0f0f0f; color: #fff;
+           display: flex; align-items: center; justify-content: center;
+           height: 100vh; margin: 0; text-align: center; padding: 24px; box-sizing: border-box; }
+    .card { max-width: 360px; }
+    h2 { margin: 0 0 8px; font-size: 22px; }
+    p  { color: #aaa; margin: 0 0 24px; font-size: 14px; }
+    a  { display: inline-block; background: #6c63ff; color: #fff; padding: 12px 28px;
+         border-radius: 8px; text-decoration: none; font-weight: 600; }
+  </style>
+  <script>
+    // Try to open the video in the NovaPlex app via App Links.
+    // If the app is not installed, the page stays visible.
+    window.onload = function() {
+      // The current URL path is /watch/VIDEO_ID — keep it for the app link
+      window.location.href = window.location.href;
+    };
+  </script>
+</head>
+<body>
+  <div class="card">
+    <h2>Opening in NovaPlex…</h2>
+    <p>If nothing happens, make sure you have NovaPlex installed on your device.</p>
+    <a href="https://play.google.com/store/apps/details?id=com.novaplex.novaplex">
+      Get NovaPlex
+    </a>
+  </div>
+</body>
+</html>
