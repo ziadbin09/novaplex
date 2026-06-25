@@ -11,7 +11,6 @@ RUN curl -fsSL \
     && rm pocketbase.zip \
     && mv pocketbase /usr/local/bin/pocketbase
 
-VOLUME /pb_data
 EXPOSE 8080
 
 # Railway injects $PORT — PocketBase binds to it
