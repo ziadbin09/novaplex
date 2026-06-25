@@ -56,14 +56,13 @@
                 <data android:mimeType="video/*"/>
             </intent-filter>
             <!-- App Links: shared video links open NovaPlex directly -->
-            <!-- Replace YOUR_DOMAIN.pages.dev with your actual Cloudflare Pages domain -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
                     android:scheme="https"
-                    android:host="YOUR_DOMAIN.pages.dev"
+                    android:host="novaplex-links.pages.dev"
                     android:pathPrefix="/watch/"/>
             </intent-filter>
         </activity>

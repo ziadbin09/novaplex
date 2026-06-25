@@ -41,7 +41,8 @@ class AppConstants {
   static const keyAutoPlayNext = 'auto_play_next';
   static const keyEqBands = 'eq_bands_v1';
 
-  // Remote streaming — fill these in after Railway + Cloudflare Pages setup
+  // Remote streaming
   static const pocketbaseUrl = 'https://novaplex-backend-production.up.railway.app';
-  static const appLinksDomain = 'YOUR_DOMAIN.pages.dev';
+  static const appLinksDomain = 'novaplex-links.pages.dev';
+  static const r2BucketUrl = 'https://pub-5d1f038f7ff34fb187e0e8bd49210a8b.r2.dev';
 }

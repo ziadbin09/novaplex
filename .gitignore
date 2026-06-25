@@ -44,3 +44,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /android/build/
+
+# Node / Wrangler (local dev tooling, not part of the Flutter app)
+node_modules/
+package.json
+package-lock.json
+nul
