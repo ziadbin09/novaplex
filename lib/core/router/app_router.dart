@@ -8,23 +8,34 @@ import '../../features/player/player_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/playlists/playlists_screen.dart';
 import '../../features/playlists/playlist_detail_screen.dart';
-import '../../features/downloads/downloads_screen.dart';
 import '../../data/models/video_file.dart';
 import '../../features/watch/watch_screen.dart';
+import '../../features/splash/splash_screen.dart';
+import '../../features/home/home_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/library',
-  // Unknown locations (e.g. stray deep links) fall back to the library
-  onException: (_, state, router) => router.go('/library'),
+  initialLocation: '/splash',
+  onException: (_, state, router) => router.go('/home'),
   routes: [
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/splash',
+      pageBuilder: (context, state) => const NoTransitionPage(
+        child: SplashScreen(),
+      ),
+    ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) => HomeShell(child: child),
       routes: [
+        GoRoute(
+          path: '/home',
+          builder: (context, state) => const HomeScreen(),
+        ),
         GoRoute(
           path: '/library',
           builder: (context, state) => const LibraryScreen(),
@@ -36,10 +47,6 @@ final appRouter = GoRouter(
         GoRoute(
           path: '/playlists',
           builder: (context, state) => const PlaylistsScreen(),
-        ),
-        GoRoute(
-          path: '/downloads',
-          builder: (context, state) => const DownloadsScreen(),
         ),
         GoRoute(
           path: '/settings',

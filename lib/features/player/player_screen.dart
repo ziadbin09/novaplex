@@ -442,6 +442,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: const Color(0xFF1C1C28),
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -618,11 +619,6 @@ class _MoreOptionsSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final subtitleLabel =
         controller.currentSubtitle.id == 'no' ? 'Off' : 'On';
-    final loopLabel =
-        controller.loopMode == LoopMode.off ? 'Off' : 'Loop One';
-    final sleepLabel = controller.sleepTimerRemaining != null
-        ? _formatRemaining(controller.sleepTimerRemaining!)
-        : (controller.sleepOnVideoEnd ? 'End of video' : 'Off');
     final audioLabel =
         controller.player.state.tracks.audio.length > 1 ? 'Available' : 'Default';
 
@@ -631,19 +627,6 @@ class _MoreOptionsSheet extends StatelessWidget {
           () => _cycleZoom(context)),
       (Icons.subtitles_outlined, 'Subtitles', subtitleLabel, onSubtitles),
       (Icons.audiotrack_outlined, 'Audio Track', audioLabel, onAudioTrack),
-      (Icons.loop_rounded, 'Loop', loopLabel, () {
-        controller.toggleLoop();
-        Navigator.pop(context);
-      }),
-      (Icons.timer_outlined, 'Sleep Timer', sleepLabel, onSleepTimer),
-      (
-        Icons.sync_alt_rounded,
-        'A/V Sync',
-        controller.audioDelay != 0 || controller.subtitleDelay != 0
-            ? 'Adjusted'
-            : '',
-        onSync
-      ),
       (Icons.camera_alt_outlined, 'Screenshot', '', onScreenshot),
       (Icons.equalizer_rounded, 'Equalizer', '', onEqualizer),
       (
@@ -671,19 +654,29 @@ class _MoreOptionsSheet extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        ...options.map((o) => ListTile(
-              leading: Icon(o.$1, color: Colors.white70),
-              title: Text(o.$2,
-                  style:
-                      const TextStyle(color: Colors.white, fontSize: 15)),
-              trailing: o.$3.isNotEmpty
-                  ? Text(o.$3,
-                      style: const TextStyle(
-                          color: Colors.white54, fontSize: 13))
-                  : null,
-              onTap: o.$4,
-            )),
-        const SizedBox(height: 8),
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.6,
+          ),
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              ...options.map((o) => ListTile(
+                    leading: Icon(o.$1, color: Colors.white70),
+                    title: Text(o.$2,
+                        style: const TextStyle(
+                            color: Colors.white, fontSize: 15)),
+                    trailing: o.$3.isNotEmpty
+                        ? Text(o.$3,
+                            style: const TextStyle(
+                                color: Colors.white54, fontSize: 13))
+                        : null,
+                    onTap: o.$4,
+                  )),
+              const SizedBox(height: 8),
+            ],
+          ),
+        ),
       ],
     );
   }

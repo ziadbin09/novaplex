@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:volume_controller/volume_controller.dart';
@@ -64,14 +65,25 @@ class _GestureDetectorLayerState extends State<GestureDetectorLayer> {
   Offset _lastTapPos = Offset.zero;
   int _tapCount = 0;
 
+  Timer? _hideTimer;
+
+  @override
+  void dispose() {
+    _hideTimer?.cancel();
+    super.dispose();
+  }
+
   void _showIndicator(String text, double value, IconData icon) {
     if (!mounted) return;
-    setState(() {
-      _indicator = text;
-      _indicatorValue = value;
-      _indicatorIcon = icon;
-    });
-    Future.delayed(const Duration(milliseconds: 800), () {
+    _hideTimer?.cancel();
+    if (_indicator != text || _indicatorValue != value || _indicatorIcon != icon) {
+      setState(() {
+        _indicator = text;
+        _indicatorValue = value;
+        _indicatorIcon = icon;
+      });
+    }
+    _hideTimer = Timer(const Duration(milliseconds: 900), () {
       if (mounted) setState(() => _indicator = null);
     });
   }
@@ -126,6 +138,8 @@ class _GestureDetectorLayerState extends State<GestureDetectorLayer> {
             _seekDelta = 0;
             _startScale = widget.controller.videoScale;
             _startBrightness = await _BrightnessChannel.get();
+            // Suppress Android system volume popup during swipe gestures
+            VolumeController.instance.showSystemUI = false;
             // Combined level: 0..1 device volume, 1..2 software boost
             _startVolume = await VolumeController.instance.getVolume() +
                 widget.controller.volumeBoost;
@@ -219,6 +233,8 @@ class _GestureDetectorLayerState extends State<GestureDetectorLayer> {
               widget.controller.resetVideoScale();
             }
             _panAxis = null;
+            // Restore system UI for hardware volume buttons
+            VolumeController.instance.showSystemUI = true;
           },
           onLongPressStart: (_) {
             widget.controller.player.setRate(2.0);
