@@ -10,6 +10,7 @@ import '../../features/playlists/playlists_screen.dart';
 import '../../features/playlists/playlist_detail_screen.dart';
 import '../../data/models/video_file.dart';
 import '../../features/watch/watch_screen.dart';
+import '../../features/watch/shared_video_screen.dart';
 import '../../features/splash/splash_screen.dart';
 import '../../features/home/home_screen.dart';
 
@@ -58,7 +59,10 @@ final appRouter = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/player',
       pageBuilder: (context, state) {
-        final video = state.extra as VideoFile;
+        final video = state.extra as VideoFile?;
+        if (video == null) {
+          return const NoTransitionPage(child: SizedBox.shrink());
+        }
         return CustomTransitionPage(
           child: PlayerScreen(video: video),
           transitionsBuilder: (ctx, animation, _, child) => FadeTransition(
@@ -98,6 +102,26 @@ final appRouter = GoRouter(
         final id = state.pathParameters['id']!;
         return CustomTransitionPage(
           child: WatchScreen(videoId: id),
+          transitionsBuilder: (ctx, animation, _, child) => FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+          transitionDuration: const Duration(milliseconds: 250),
+        );
+      },
+    ),
+    // Shared video player (embedded player + info panel)
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/stream/:id',
+      pageBuilder: (context, state) {
+        final video = state.extra as VideoFile?;
+        if (video == null) {
+          final id = state.pathParameters['id']!;
+          return NoTransitionPage(child: WatchScreen(videoId: id));
+        }
+        return CustomTransitionPage(
+          child: SharedVideoScreen(video: video),
           transitionsBuilder: (ctx, animation, _, child) => FadeTransition(
             opacity: animation,
             child: child,

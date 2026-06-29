@@ -137,12 +137,15 @@ class _GestureDetectorLayerState extends State<GestureDetectorLayer> {
             _accumDy = 0;
             _seekDelta = 0;
             _startScale = widget.controller.videoScale;
-            _startBrightness = await _BrightnessChannel.get();
+            final brightness = await _BrightnessChannel.get();
+            if (!mounted) return;
+            _startBrightness = brightness;
             // Suppress Android system volume popup during swipe gestures
             VolumeController.instance.showSystemUI = false;
+            final volume = await VolumeController.instance.getVolume();
+            if (!mounted) return;
             // Combined level: 0..1 device volume, 1..2 software boost
-            _startVolume = await VolumeController.instance.getVolume() +
-                widget.controller.volumeBoost;
+            _startVolume = volume + widget.controller.volumeBoost;
           },
           onScaleUpdate: (d) {
             // Two fingers → pinch-to-zoom the video

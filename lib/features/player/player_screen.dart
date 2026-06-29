@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -74,6 +75,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
     _controller.addListener(_rebuild);
     _resumeIfNeeded();
     _startSaveTimer();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     PipChannel.setPlayerActive(true);
     _pipSub = PipChannel.pipModeStream.listen((inPip) {
       if (mounted) setState(() => _inPipMode = inPip);
@@ -306,7 +308,21 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
   @override
   void dispose() {
     _saveTimer?.cancel();
-    _saveProgress();
+    // Capture values before disposal so the async save doesn't touch ref/state
+    final pos = _controller.player.state.position;
+    final dur = _controller.player.state.duration;
+    final videoId = widget.video.id;
+    final videoPath = widget.video.path;
+    final videoTitle = widget.video.title;
+    if (dur > Duration.zero) {
+      ref.read(watchHistoryRepositoryProvider).saveEntry(
+            videoId: videoId,
+            videoPath: videoPath,
+            videoTitle: videoTitle,
+            position: pos,
+            duration: dur,
+          );
+    }
     _controller.removeListener(_rebuild);
     _pipSub?.cancel();
     _playingSub?.cancel();
@@ -315,13 +331,16 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
     _upNextTimer?.cancel();
     _castTicker?.cancel();
     _castSub?.cancel();
-    // Local file casting depends on our in-app HTTP server, which dies with
-    // this screen — end the session so the TV doesn't stall on a dead URL.
+    // Clear static callbacks so they don't hold a reference to this screen
+    MediaSessionChannel.onPlay = null;
+    MediaSessionChannel.onPause = null;
+    MediaSessionChannel.onSeek = null;
     if (_isCasting) CastChannel.stop();
     _mediaServer.stop();
     PipChannel.setPlayerActive(false);
     MediaSessionChannel.stop();
     _controller.dispose();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.dispose();
   }
 
