@@ -15,8 +15,8 @@ final settingsProvider =
 class AppSettings {
   const AppSettings({
     this.themeMode = AppThemeMode.dark,
-    this.accentColor = AppColors.accentViolet,
-    this.accentColorSecondary,
+    this.accentColor = AppColors.accentTeal,
+    this.accentColorSecondary = AppColors.accentAmber,
     this.skipDuration = AppConstants.defaultSkipSeconds,
     this.brightnessGesture = true,
     this.volumeGesture = true,
@@ -102,10 +102,12 @@ class SettingsNotifier extends Notifier<AppSettings> {
 
   static AppSettings _load(SharedPreferences prefs) {
     final themeModeIdx = prefs.getInt(AppConstants.keyThemeMode) ?? 0;
+    final hasSavedAccent = prefs.containsKey(AppConstants.keyAccentColor);
     final accentValue = prefs.getInt(AppConstants.keyAccentColor) ??
-        AppColors.accentViolet.toARGB32();
+        AppColors.accentTeal.toARGB32();
     final accentSecondaryValue =
-        prefs.getInt(AppConstants.keyAccentColorSecondary);
+        prefs.getInt(AppConstants.keyAccentColorSecondary) ??
+            (hasSavedAccent ? null : AppColors.accentAmber.toARGB32());
     return AppSettings(
       themeMode: AppThemeMode.values[
           themeModeIdx.clamp(0, AppThemeMode.values.length - 1)],
