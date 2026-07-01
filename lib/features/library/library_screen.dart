@@ -59,11 +59,37 @@ final _filteredVideosProvider = Provider<AsyncValue<List<VideoFile>>>((ref) {
   });
 });
 
-class LibraryScreen extends ConsumerWidget {
+class LibraryScreen extends ConsumerStatefulWidget {
   const LibraryScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LibraryScreen> createState() => _LibraryScreenState();
+}
+
+class _LibraryScreenState extends ConsumerState<LibraryScreen>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Refresh library when user returns from Android Settings after granting permission
+    if (state == AppLifecycleState.resumed) {
+      ref.invalidate(videosProvider);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final colors = context.colors;
     final isGrid = ref.watch(_isGridProvider);
 
@@ -172,7 +198,7 @@ class _TopBar extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(20, 16, 12, 0),
       child: Row(
         children: [
-          Text('NovaPlex',
+          Text('Manzar',
               style: context.text.displayMedium
                   ?.copyWith(color: colors.accent, fontSize: 22)),
           const Spacer(),
@@ -546,7 +572,7 @@ class _PermissionPrompt extends StatelessWidget {
                     ?.copyWith(color: colors.textPrimary)),
             const SizedBox(height: 8),
             Text(
-              'NovaPlex needs permission to show the videos on your device. '
+              'Manzar needs permission to show the videos on your device. '
               'Without it, the library stays empty.',
               textAlign: TextAlign.center,
               style: context.text.bodyMedium,

@@ -24,8 +24,8 @@ CastState _stateFromInt(int v) {
 
 /// Bridge to the native Google Cast SDK.
 class CastChannel {
-  static const _method = MethodChannel('com.novaplex/cast');
-  static const _events = EventChannel('com.novaplex/cast_events');
+  static const _method = MethodChannel('com.manzar/cast');
+  static const _events = EventChannel('com.manzar/cast_events');
 
   /// True if Google Play Services + Cast are available on this device.
   static Future<bool> isAvailable() async {

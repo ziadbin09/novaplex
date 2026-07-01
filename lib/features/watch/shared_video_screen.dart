@@ -562,7 +562,7 @@ class _ShareSheet extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                     try {
-                      Share.share(url, subject: 'Watch on NovaPlex');
+                      Share.share(url, subject: 'Watch on Manzar');
                     } catch (_) {
                       Clipboard.setData(ClipboardData(text: url));
                       ScaffoldMessenger.of(context).showSnackBar(

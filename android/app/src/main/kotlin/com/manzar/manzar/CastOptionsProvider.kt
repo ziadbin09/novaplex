@@ -1,4 +1,4 @@
-package com.novaplex.novaplex
+package com.manzar.manzar
 
 import android.content.Context
 import com.google.android.gms.cast.CastMediaControlIntent

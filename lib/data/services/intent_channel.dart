@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 
 /// Receives video URIs from Android "Open with" VIEW intents.
 class IntentChannel {
-  static const _ch = MethodChannel('com.novaplex/intent');
+  static const _ch = MethodChannel('com.manzar/intent');
 
   static void Function(String uri)? onNewUri;
   static bool _handlerInstalled = false;

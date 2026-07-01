@@ -211,7 +211,7 @@ class DownloadManager extends Notifier<List<DownloadTask>> {
     '.ts': 'video/mp2t',
   };
 
-  /// Copy a finished download into the public Movies/NovaPlex gallery folder,
+  /// Copy a finished download into the public Movies/Manzar gallery folder,
   /// then point the task at the published URI and remove the temp file.
   Future<void> _publishToGallery(String id) async {
     final task = state.where((t) => t.id == id).firstOrNull;

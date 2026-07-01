@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 
 class PipChannel {
-  static const _method = MethodChannel('com.novaplex/pip');
-  static const _events = EventChannel('com.novaplex/pip_events');
+  static const _method = MethodChannel('com.manzar/pip');
+  static const _events = EventChannel('com.manzar/pip_events');
 
   /// Request Android to enter PiP mode. Returns true if supported.
   static Future<bool> enterPip() async {

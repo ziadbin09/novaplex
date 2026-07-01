@@ -135,7 +135,7 @@ class SettingsScreen extends ConsumerWidget {
                     value: '1.0.0'),
                 Divider(color: colors.border, height: 1),
                 _InfoTile(icon: Icons.movie_outlined, label: 'App',
-                    value: 'NovaPlex'),
+                    value: 'Manzar'),
               ]),
             ),
 

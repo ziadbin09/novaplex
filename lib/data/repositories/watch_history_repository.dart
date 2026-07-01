@@ -31,14 +31,21 @@ class WatchHistoryRepository {
   WatchHistoryRepository(this._prefs);
   final SharedPreferences _prefs;
 
+  List<WatchEntry>? _cache;
+
   List<WatchEntry> getAll() {
+    if (_cache != null) return List.unmodifiable(_cache!);
     final raw = _prefs.getString(_kWatchHistoryKey);
-    if (raw == null || raw.isEmpty) return [];
-    try {
-      return WatchEntry.listFromJson(raw);
-    } catch (_) {
-      return [];
+    if (raw == null || raw.isEmpty) {
+      _cache = [];
+      return const [];
     }
+    try {
+      _cache = WatchEntry.listFromJson(raw);
+    } catch (_) {
+      _cache = [];
+    }
+    return List.unmodifiable(_cache!);
   }
 
   WatchEntry? getEntry(String videoId) {
@@ -52,10 +59,8 @@ class WatchHistoryRepository {
     required Duration position,
     required Duration duration,
   }) async {
-    final entries = getAll();
-    // Remove existing entry for this video
+    final entries = List<WatchEntry>.from(getAll());
     entries.removeWhere((e) => e.videoId == videoId);
-    // Add updated entry at front
     entries.insert(
       0,
       WatchEntry(
@@ -67,18 +72,21 @@ class WatchHistoryRepository {
         lastWatched: DateTime.now(),
       ),
     );
-    // Trim to max
     final trimmed =
         entries.length > _kMaxEntries ? entries.sublist(0, _kMaxEntries) : entries;
+    _cache = trimmed;
     await _prefs.setString(_kWatchHistoryKey, WatchEntry.listToJson(trimmed));
   }
 
   Future<void> removeEntry(String videoId) async {
-    final entries = getAll()..removeWhere((e) => e.videoId == videoId);
+    final entries = List<WatchEntry>.from(getAll())
+      ..removeWhere((e) => e.videoId == videoId);
+    _cache = entries;
     await _prefs.setString(_kWatchHistoryKey, WatchEntry.listToJson(entries));
   }
 
   Future<void> clearAll() async {
+    _cache = [];
     await _prefs.remove(_kWatchHistoryKey);
   }
 }

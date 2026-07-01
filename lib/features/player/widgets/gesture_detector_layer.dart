@@ -6,7 +6,7 @@ import '../controllers/player_controller.dart';
 
 // Native brightness channel — no external package needed
 class _BrightnessChannel {
-  static const _ch = MethodChannel('com.novaplex/brightness');
+  static const _ch = MethodChannel('com.manzar/brightness');
 
   static Future<double> get() async {
     try {

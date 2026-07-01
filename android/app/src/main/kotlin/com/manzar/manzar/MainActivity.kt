@@ -1,4 +1,4 @@
-package com.novaplex.novaplex
+package com.manzar.manzar
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -39,20 +39,20 @@ import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
-    private val BRIGHTNESS_CHANNEL = "com.novaplex/brightness"
-    private val PIP_CHANNEL = "com.novaplex/pip"
-    private val PIP_EVENTS = "com.novaplex/pip_events"
-    private val SHARE_CHANNEL = "com.novaplex/share"
-    private val MEDIA_SESSION_CHANNEL = "com.novaplex/media_session"
-    private val INTENT_CHANNEL = "com.novaplex/intent"
-    private val CAST_CHANNEL = "com.novaplex/cast"
-    private val CAST_EVENTS = "com.novaplex/cast_events"
-    private val STORAGE_CHANNEL = "com.novaplex/storage"
-    private val DEVICE_CHANNEL = "com.novaplex/device"
+    private val BRIGHTNESS_CHANNEL = "com.manzar/brightness"
+    private val PIP_CHANNEL = "com.manzar/pip"
+    private val PIP_EVENTS = "com.manzar/pip_events"
+    private val SHARE_CHANNEL = "com.manzar/share"
+    private val MEDIA_SESSION_CHANNEL = "com.manzar/media_session"
+    private val INTENT_CHANNEL = "com.manzar/intent"
+    private val CAST_CHANNEL = "com.manzar/cast"
+    private val CAST_EVENTS = "com.manzar/cast_events"
+    private val STORAGE_CHANNEL = "com.manzar/storage"
+    private val DEVICE_CHANNEL = "com.manzar/device"
 
-    private val NOTIFICATION_CHANNEL_ID = "novaplex_playback"
+    private val NOTIFICATION_CHANNEL_ID = "manzar_playback"
     private val NOTIFICATION_ID = 7001
-    private val ACTION_PLAY_PAUSE = "com.novaplex.PLAY_PAUSE"
+    private val ACTION_PLAY_PAUSE = "com.manzar.PLAY_PAUSE"
 
     private var pipEventSink: EventChannel.EventSink? = null
     private var playerIsActive = false
@@ -63,7 +63,7 @@ class MainActivity : FlutterActivity() {
     private var pendingViewUri: String? = null
     private var pickResult: MethodChannel.Result? = null
     private val PICK_VIDEO_REQUEST = 9001
-    private var sessionTitle = "NovaPlex"
+    private var sessionTitle = "Manzar"
     private var lastPlaying = false
     private var lastPositionMs = 0L
     private var lastDurationMs = 0L
@@ -202,7 +202,7 @@ class MainActivity : FlutterActivity() {
             ch.setMethodCallHandler { call, result ->
                 when (call.method) {
                     "start" -> {
-                        sessionTitle = call.argument<String>("title") ?: "NovaPlex"
+                        sessionTitle = call.argument<String>("title") ?: "Manzar"
                         startMediaSession()
                         result.success(null)
                     }
@@ -313,7 +313,7 @@ class MainActivity : FlutterActivity() {
 
     // ── Public storage helpers ───────────────────────────────────────────────
 
-    /// Copy a finished download into the public Movies/NovaPlex collection so it
+    /// Copy a finished download into the public Movies/Manzar collection so it
     /// shows in the gallery and survives uninstall. Returns a content:// URI
     /// (API 29+) or an absolute file path (API ≤28), or null on failure.
     private fun saveVideoToGallery(
@@ -331,7 +331,7 @@ class MainActivity : FlutterActivity() {
                 put(MediaStore.Video.Media.MIME_TYPE, mimeType)
                 put(
                     MediaStore.Video.Media.RELATIVE_PATH,
-                    "${Environment.DIRECTORY_MOVIES}/NovaPlex"
+                    "${Environment.DIRECTORY_MOVIES}/Manzar"
                 )
                 put(MediaStore.Video.Media.IS_PENDING, 1)
             }
@@ -352,7 +352,7 @@ class MainActivity : FlutterActivity() {
                 Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_MOVIES
                 ),
-                "NovaPlex"
+                "Manzar"
             )
             if (!moviesDir.exists()) moviesDir.mkdirs()
             val dest = File(moviesDir, displayName)
@@ -525,7 +525,7 @@ class MainActivity : FlutterActivity() {
 
     private fun startMediaSession() {
         if (mediaSession == null) {
-            mediaSession = MediaSessionCompat(this, "NovaPlex").apply {
+            mediaSession = MediaSessionCompat(this, "Manzar").apply {
                 setCallback(object : MediaSessionCompat.Callback() {
                     override fun onPlay() {
                         mediaChannel?.invokeMethod("onPlay", null)

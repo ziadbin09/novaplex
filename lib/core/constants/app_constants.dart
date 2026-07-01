@@ -43,6 +43,6 @@ class AppConstants {
 
   // Remote streaming
   static const pocketbaseUrl = 'https://novaplex-backend-production.up.railway.app';
-  static const appLinksDomain = 'novaplex-links.pages.dev';
+  static const appLinksDomain = 'manzar-links.pages.dev';
   static const r2BucketUrl = 'https://pub-5d1f038f7ff34fb187e0e8bd49210a8b.r2.dev';
 }

@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 class ShareChannel {
-  static const _method = MethodChannel('com.novaplex/share');
+  static const _method = MethodChannel('com.manzar/share');
 
   /// Share a local video by its photo_manager asset ID.
   /// Resolves the content:// URI from photo_manager, then fires Android share intent.

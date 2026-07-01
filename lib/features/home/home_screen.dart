@@ -42,11 +42,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (watchId != null) {
       context.push('/watch/$watchId');
     } else {
+      final rawSegment = Uri.tryParse(url)?.pathSegments
+          .where((s) => s.isNotEmpty).lastOrNull ?? '';
+      final videoTitle = rawSegment.split('?').first.isEmpty
+          ? 'External video'
+          : rawSegment.split('?').first;
       context.push('/player', extra: VideoFile(
         id: 'url_${DateTime.now().millisecondsSinceEpoch}',
-        title: url.split('/').last.split('?').first.isEmpty
-            ? 'External video'
-            : url.split('/').last.split('?').first,
+        title: videoTitle,
         path: url,
         duration: Duration.zero,
         size: 0,
@@ -319,7 +322,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Paste a NovaPlex link and play instantly',
+                        'Paste a Manzar link and play instantly',
                         style: TextStyle(
                           fontSize: 12,
                           color: colors.textSecondary,
@@ -348,7 +351,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 controller: _urlController,
                 style: TextStyle(fontSize: 12, color: colors.textPrimary),
                 decoration: InputDecoration(
-                  hintText: 'Paste your NovaPlex link here...',
+                  hintText: 'Paste your Manzar link here...',
                   hintStyle: TextStyle(
                       fontSize: 12,
                       color: colors.textSecondary.withValues(alpha: 0.5)),
@@ -367,6 +370,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           onTap: () async {
                             final data = await Clipboard.getData(
                                 Clipboard.kTextPlain);
+                            if (!mounted) return;
                             if (data?.text != null) {
                               _urlController.text = data!.text!;
                             }

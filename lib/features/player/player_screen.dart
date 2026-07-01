@@ -541,11 +541,11 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
         return;
       }
       final filename =
-          'NovaPlex_${DateTime.now().millisecondsSinceEpoch}.png';
+          'Manzar_${DateTime.now().millisecondsSinceEpoch}.png';
       await PhotoManager.editor.saveImage(
         bytes,
         filename: filename,
-        desc: 'Screenshot from NovaPlex',
+        desc: 'Screenshot from Manzar',
       );
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

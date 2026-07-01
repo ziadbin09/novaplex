@@ -59,6 +59,7 @@ class PlayerController extends ChangeNotifier {
 
   Timer? _hideTimer;
   Timer? _sleepTimer;
+  StreamSubscription<bool>? _completedSub;
 
   Future<void> _init(bool hardwareDecode, List<double> eqBands) async {
     player = Player();
@@ -80,12 +81,11 @@ class PlayerController extends ChangeNotifier {
     await player.open(Media(video.path));
     _startHideTimer();
     // Listen for video end to handle "end of video" sleep timer
-    player.stream.completed.listen((completed) {
+    _completedSub = player.stream.completed.listen((completed) {
       if (completed && _sleepOnVideoEnd) {
         _sleepOnVideoEnd = false;
         didSleepAtEnd = true;
         cancelSleepTimer();
-        // Player stops naturally at end; nothing extra needed
       }
     });
     notifyListeners();
@@ -351,6 +351,7 @@ class PlayerController extends ChangeNotifier {
     _hideTimer?.cancel();
     _sleepTimer?.cancel();
     _abSub?.cancel();
+    _completedSub?.cancel();
     player.dispose();
     WakelockPlus.disable();
     SystemChrome.setPreferredOrientations([

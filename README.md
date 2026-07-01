@@ -1,6 +1,6 @@
-# novaplex
+# Manzar
 
-A new Flutter project.
+Manzar — a modern video player and streaming app built with Flutter.
 
 ## Getting Started
 

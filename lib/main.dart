@@ -38,14 +38,14 @@ void main() async {
       overrides: [
         sharedPrefsProvider.overrideWithValue(prefs),
       ],
-      child: const NovaPlex(),
+      child: const Manzar(),
     ),
   );
 
   _wireOpenWithIntents();
 }
 
-/// Route "Open with NovaPlex" and shared video links into the right screen.
+/// Route "Open with Manzar" and shared video links into the right screen.
 void _wireOpenWithIntents() {
   VideoFile videoFromUri(String uri) {
     final decoded = Uri.decodeComponent(uri);
@@ -81,7 +81,7 @@ void _wireOpenWithIntents() {
 }
 
 /// Extracts the video ID from a shared link like:
-/// https://novaplex.pages.dev/watch/abc123
+/// https://manzar-links.pages.dev/watch/abc123
 String? _extractWatchId(String uri) {
   try {
     final parsed = Uri.parse(uri);
@@ -94,8 +94,8 @@ String? _extractWatchId(String uri) {
   return null;
 }
 
-class NovaPlex extends ConsumerWidget {
-  const NovaPlex({super.key});
+class Manzar extends ConsumerWidget {
+  const Manzar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -117,7 +117,7 @@ class NovaPlex extends ConsumerWidget {
     }
 
     return MaterialApp.router(
-      title: 'NovaPlex',
+      title: 'Manzar',
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
       darkTheme: settings.themeMode == AppThemeMode.amoled

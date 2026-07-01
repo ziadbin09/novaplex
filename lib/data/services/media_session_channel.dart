@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 /// Bridges Android MediaSession so play/pause/seek work from the
 /// notification shade and lock screen.
 class MediaSessionChannel {
-  static const _ch = MethodChannel('com.novaplex/media_session');
+  static const _ch = MethodChannel('com.manzar/media_session');
 
   static void Function()? onPlay;
   static void Function()? onPause;

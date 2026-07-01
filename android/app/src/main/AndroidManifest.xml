@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
-        android:label="NovaPlex"
+        android:label="Manzar"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -55,14 +55,14 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="video/*"/>
             </intent-filter>
-            <!-- App Links: shared video links open NovaPlex directly -->
+            <!-- App Links: shared video links open Manzar directly -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
                     android:scheme="https"
-                    android:host="novaplex-links.pages.dev"
+                    android:host="manzar-links.pages.dev"
                     android:pathPrefix="/watch/"/>
             </intent-filter>
         </activity>
@@ -72,7 +72,7 @@
         <!-- Google Cast options provider -->
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
-            android:value="com.novaplex.novaplex.CastOptionsProvider" />
+            android:value="com.manzar.manzar.CastOptionsProvider" />
     </application>
     <queries>
         <intent>
