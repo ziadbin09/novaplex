@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 
+/// An accent color choice. [secondary] is null for plain single-color
+/// presets; when set, it's used as a companion highlight (slider thumb,
+/// switch track) alongside [primary] as the main accent.
+@immutable
+class AccentPreset {
+  const AccentPreset(this.primary, [this.secondary]);
+  final Color primary;
+  final Color? secondary;
+}
+
 class AppColors {
   AppColors._();
 
@@ -27,22 +37,21 @@ class AppColors {
   // Accent presets
   static const Color accentViolet = Color(0xFF7C6FFF);
   static const Color accentBlue = Color(0xFF4D8EFF);
-  static const Color accentCyan = Color(0xFF00C8E0);
+  static const Color accentTeal = Color(0xFF00778F); // Manzar logo teal
   static const Color accentGreen = Color(0xFF00D68F);
   static const Color accentOrange = Color(0xFFFF8C42);
   static const Color accentRed = Color(0xFFFF5C5C);
   static const Color accentPink = Color(0xFFFF5FA3);
-  static const Color accentGold = Color(0xFFFFBB33);
+  static const Color accentAmber = Color(0xFFF8A748); // Manzar logo amber
 
-  static const List<Color> accentPresets = [
-    accentViolet,
-    accentBlue,
-    accentCyan,
-    accentGreen,
-    accentOrange,
-    accentRed,
-    accentPink,
-    accentGold,
+  static const List<AccentPreset> accentPresets = [
+    AccentPreset(accentTeal, accentAmber), // Manzar brand combo
+    AccentPreset(accentViolet),
+    AccentPreset(accentBlue),
+    AccentPreset(accentGreen),
+    AccentPreset(accentOrange),
+    AccentPreset(accentRed),
+    AccentPreset(accentPink),
   ];
 
   // Player UI

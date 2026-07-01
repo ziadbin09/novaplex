@@ -55,7 +55,7 @@ class FolderDetailScreen extends ConsumerWidget {
                     const Spacer(),
                     FilledButton.icon(
                       style: FilledButton.styleFrom(
-                        backgroundColor: colors.accent,
+                        backgroundColor: colors.accentSecondary,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),
                       ),

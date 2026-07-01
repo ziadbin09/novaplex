@@ -22,7 +22,7 @@ class DownloadsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: colors.bg,
       floatingActionButton: FloatingActionButton.small(
-        backgroundColor: colors.accent,
+        backgroundColor: colors.accentSecondary,
         tooltip: 'Download from URL',
         onPressed: () => _showDownloadDialog(context, ref),
         child: const Icon(Icons.add_rounded),

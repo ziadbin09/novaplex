@@ -101,10 +101,11 @@ class Manzar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     final accent = settings.accentColor;
+    final accentSecondary = settings.accentColorSecondary;
 
-    final lightTheme = AppTheme.light(accent);
-    final darkTheme = AppTheme.dark(accent);
-    final amoledTheme = AppTheme.amoled(accent);
+    final lightTheme = AppTheme.light(accent, accentSecondary);
+    final darkTheme = AppTheme.dark(accent, accentSecondary);
+    final amoledTheme = AppTheme.amoled(accent, accentSecondary);
 
     ThemeMode themeMode;
     switch (settings.themeMode) {

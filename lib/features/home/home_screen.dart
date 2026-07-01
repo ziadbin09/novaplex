@@ -153,7 +153,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: 'Nova',
+                  text: 'Man',
                   style: TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.w800,
@@ -162,7 +162,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
                 TextSpan(
-                  text: 'Plex',
+                  text: 'zar',
                   style: TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.w800,
@@ -301,7 +301,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: colors.accent,
+                    color: colors.accentSecondary,
                     borderRadius: BorderRadius.circular(11),
                   ),
                   child: const Icon(Icons.play_circle_fill_rounded,
@@ -410,7 +410,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 icon: const Icon(Icons.play_arrow_rounded, size: 20),
                 label: const Text('Play Now'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: colors.accent,
+                  backgroundColor: colors.accentSecondary,
                   foregroundColor: Colors.white,
                   disabledBackgroundColor:
                       colors.surfaceAlt,

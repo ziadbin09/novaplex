@@ -120,7 +120,7 @@ class _DownloadUrlDialogState extends State<_DownloadUrlDialog> {
         ),
         FilledButton(
           onPressed: _valid ? _submit : null,
-          style: FilledButton.styleFrom(backgroundColor: colors.accent),
+          style: FilledButton.styleFrom(backgroundColor: colors.accentSecondary),
           child: const Text('Download'),
         ),
       ],

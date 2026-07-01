@@ -245,7 +245,7 @@ class _InfoBody extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               style: FilledButton.styleFrom(
-                backgroundColor: colors.accent,
+                backgroundColor: colors.accentSecondary,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14)),
               ),
@@ -323,7 +323,7 @@ class _ErrorView extends StatelessWidget {
               FilledButton(
                 onPressed: onRetry,
                 style: FilledButton.styleFrom(
-                    backgroundColor: colors.accent),
+                    backgroundColor: colors.accentSecondary),
                 child: const Text('Retry'),
               ),
             ],
@@ -419,7 +419,7 @@ class _ShareSheet extends StatelessWidget {
                     }
                   },
                   style: FilledButton.styleFrom(
-                    backgroundColor: colors.accent,
+                    backgroundColor: colors.accentSecondary,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     padding: const EdgeInsets.symmetric(vertical: 12),

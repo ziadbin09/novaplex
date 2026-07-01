@@ -8,7 +8,7 @@ enum AppThemeMode { dark, light, amoled, system }
 class AppTheme {
   AppTheme._();
 
-  static ThemeData dark(Color accent) => _build(
+  static ThemeData dark(Color accent, [Color? accentSecondary]) => _build(
         brightness: Brightness.dark,
         bg: AppColors.bgDark,
         surface: AppColors.surfaceDark,
@@ -17,9 +17,10 @@ class AppTheme {
         textPrimary: AppColors.textPrimaryDark,
         textSecondary: AppColors.textSecondaryDark,
         accent: accent,
+        accentSecondary: accentSecondary,
       );
 
-  static ThemeData amoled(Color accent) => _build(
+  static ThemeData amoled(Color accent, [Color? accentSecondary]) => _build(
         brightness: Brightness.dark,
         bg: AppColors.bgAmoled,
         surface: AppColors.surfaceAmoled,
@@ -28,9 +29,10 @@ class AppTheme {
         textPrimary: AppColors.textPrimaryDark,
         textSecondary: AppColors.textSecondaryDark,
         accent: accent,
+        accentSecondary: accentSecondary,
       );
 
-  static ThemeData light(Color accent) => _build(
+  static ThemeData light(Color accent, [Color? accentSecondary]) => _build(
         brightness: Brightness.light,
         bg: AppColors.bgLight,
         surface: AppColors.surfaceLight,
@@ -39,6 +41,7 @@ class AppTheme {
         textPrimary: AppColors.textPrimaryLight,
         textSecondary: AppColors.textSecondaryLight,
         accent: accent,
+        accentSecondary: accentSecondary,
       );
 
   static ThemeData _build({
@@ -50,7 +53,9 @@ class AppTheme {
     required Color textPrimary,
     required Color textSecondary,
     required Color accent,
+    Color? accentSecondary,
   }) {
+    final accent2 = accentSecondary ?? accent;
     final isDark = brightness == Brightness.dark;
     final textTheme = GoogleFonts.interTextTheme(
       ThemeData(brightness: brightness).textTheme,
@@ -138,14 +143,14 @@ class AppTheme {
       sliderTheme: SliderThemeData(
         activeTrackColor: accent,
         inactiveTrackColor: border,
-        thumbColor: accent,
-        overlayColor: accent.withValues(alpha: 0.2),
+        thumbColor: accent2,
+        overlayColor: accent2.withValues(alpha: 0.2),
         trackHeight: 3,
         thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith(
-            (s) => s.contains(WidgetState.selected) ? accent : textSecondary),
+            (s) => s.contains(WidgetState.selected) ? accent2 : textSecondary),
         trackColor: WidgetStateProperty.resolveWith((s) =>
             s.contains(WidgetState.selected)
                 ? accent.withValues(alpha: 0.4)
@@ -161,6 +166,7 @@ class AppTheme {
           textPrimary: textPrimary,
           textSecondary: textSecondary,
           accent: accent,
+          accentSecondary: accent2,
           accentSubtle: accent.withValues(alpha: 0.15),
         ),
       ],
@@ -178,6 +184,7 @@ class AppColorExtension extends ThemeExtension<AppColorExtension> {
     required this.textPrimary,
     required this.textSecondary,
     required this.accent,
+    this.accentSecondary,
     required this.accentSubtle,
   });
 
@@ -188,6 +195,7 @@ class AppColorExtension extends ThemeExtension<AppColorExtension> {
   final Color textPrimary;
   final Color textSecondary;
   final Color accent;
+  final Color? accentSecondary;
   final Color accentSubtle;
 
   @override
@@ -199,6 +207,7 @@ class AppColorExtension extends ThemeExtension<AppColorExtension> {
     Color? textPrimary,
     Color? textSecondary,
     Color? accent,
+    Color? accentSecondary,
     Color? accentSubtle,
   }) {
     return AppColorExtension(
@@ -209,6 +218,7 @@ class AppColorExtension extends ThemeExtension<AppColorExtension> {
       textPrimary: textPrimary ?? this.textPrimary,
       textSecondary: textSecondary ?? this.textSecondary,
       accent: accent ?? this.accent,
+      accentSecondary: accentSecondary ?? this.accentSecondary,
       accentSubtle: accentSubtle ?? this.accentSubtle,
     );
   }
@@ -224,6 +234,8 @@ class AppColorExtension extends ThemeExtension<AppColorExtension> {
       textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
       textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
       accent: Color.lerp(accent, other.accent, t)!,
+      accentSecondary: Color.lerp(
+          accentSecondary ?? accent, other.accentSecondary ?? other.accent, t),
       accentSubtle: Color.lerp(accentSubtle, other.accentSubtle, t)!,
     );
   }

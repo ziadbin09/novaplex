@@ -147,7 +147,7 @@ class _PlayUrlDialogState extends ConsumerState<_PlayUrlDialog> {
         ),
         FilledButton(
           onPressed: _valid ? () => _submit(_controller.text) : null,
-          style: FilledButton.styleFrom(backgroundColor: colors.accent),
+          style: FilledButton.styleFrom(backgroundColor: colors.accentSecondary),
           child: const Text('Play'),
         ),
       ],

@@ -99,7 +99,7 @@ class _PinDialogState extends State<_PinDialog> {
         ),
         FilledButton(
           onPressed: _submit,
-          style: FilledButton.styleFrom(backgroundColor: colors.accent),
+          style: FilledButton.styleFrom(backgroundColor: colors.accentSecondary),
           child: const Text('OK'),
         ),
       ],

@@ -96,7 +96,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
     return Scaffold(
       backgroundColor: colors.bg,
       floatingActionButton: FloatingActionButton.small(
-        backgroundColor: colors.accent,
+        backgroundColor: colors.accentSecondary,
         tooltip: 'Open…',
         onPressed: () => _showOpenSheet(context),
         child: const Icon(Icons.add_rounded),
@@ -580,7 +580,7 @@ class _PermissionPrompt extends StatelessWidget {
             const SizedBox(height: 20),
             FilledButton.icon(
               onPressed: onGrant,
-              style: FilledButton.styleFrom(backgroundColor: colors.accent),
+              style: FilledButton.styleFrom(backgroundColor: colors.accentSecondary),
               icon: const Icon(Icons.lock_open_rounded, size: 18),
               label: const Text('Grant access'),
             ),

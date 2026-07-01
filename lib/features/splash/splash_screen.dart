@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            // Violet glow behind icon
+            // Teal glow behind icon
             Center(
               child: Container(
                 width: 180,
@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.accentViolet.withValues(alpha: 0.25),
+                      color: AppColors.accentTeal.withValues(alpha: 0.25),
                       blurRadius: 80,
                       spreadRadius: 20,
                     ),
@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.accentViolet.withValues(alpha: 0.4),
+                          color: AppColors.accentTeal.withValues(alpha: 0.4),
                           blurRadius: 30,
                           offset: const Offset(0, 8),
                         ),
@@ -83,25 +83,25 @@ class _SplashScreenState extends State<SplashScreen> {
 
                   const SizedBox(height: 24),
 
-                  // App name: Nova(white) + Plex(violet)
+                  // App name: Man(teal) + zar(amber)
                   RichText(
                     text: const TextSpan(
                       children: [
                         TextSpan(
-                          text: 'Nova',
+                          text: 'Man',
                           style: TextStyle(
                             fontSize: 34,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.textPrimaryDark,
+                            color: AppColors.accentTeal,
                             letterSpacing: -0.5,
                           ),
                         ),
                         TextSpan(
-                          text: 'Plex',
+                          text: 'zar',
                           style: TextStyle(
                             fontSize: 34,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.accentViolet,
+                            color: AppColors.accentAmber,
                             letterSpacing: -0.5,
                           ),
                         ),
@@ -204,7 +204,7 @@ class _PulsingDotsState extends State<_PulsingDots>
               height: 6,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.accentViolet
+                color: AppColors.accentTeal
                     .withValues(alpha: 0.3 + pulse * 0.7),
               ),
             );

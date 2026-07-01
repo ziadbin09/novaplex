@@ -340,23 +340,34 @@ class _AccentColorTile extends StatelessWidget {
           Wrap(
             spacing: 10,
             runSpacing: 10,
-            children: AppColors.accentPresets.map((c) {
-              final selected = settings.accentColor.toARGB32() == c.toARGB32();
+            children: AppColors.accentPresets.map((preset) {
+              final selected = settings.accentColor.toARGB32() ==
+                      preset.primary.toARGB32() &&
+                  settings.accentColorSecondary?.toARGB32() ==
+                      preset.secondary?.toARGB32();
               return GestureDetector(
-                onTap: () => notifier.setAccentColor(c),
+                onTap: () => notifier.setAccentPreset(preset),
                 child: AnimatedContainer(
                   duration: 150.ms,
                   width: 38,
                   height: 38,
                   decoration: BoxDecoration(
-                    color: c,
+                    gradient: preset.secondary != null
+                        ? LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [preset.primary, preset.secondary!],
+                            stops: const [0.5, 0.5],
+                          )
+                        : null,
+                    color: preset.secondary == null ? preset.primary : null,
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: selected ? Colors.white : Colors.transparent,
                       width: 3,
                     ),
                     boxShadow: selected
-                        ? [BoxShadow(color: c.withValues(alpha: 0.5), blurRadius: 8)]
+                        ? [BoxShadow(color: preset.primary.withValues(alpha: 0.5), blurRadius: 8)]
                         : [],
                   ),
                   child: selected

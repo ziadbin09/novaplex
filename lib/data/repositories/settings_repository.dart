@@ -16,6 +16,7 @@ class AppSettings {
   const AppSettings({
     this.themeMode = AppThemeMode.dark,
     this.accentColor = AppColors.accentViolet,
+    this.accentColorSecondary,
     this.skipDuration = AppConstants.defaultSkipSeconds,
     this.brightnessGesture = true,
     this.volumeGesture = true,
@@ -32,6 +33,7 @@ class AppSettings {
 
   final AppThemeMode themeMode;
   final Color accentColor;
+  final Color? accentColorSecondary;
   final int skipDuration;
   final bool brightnessGesture;
   final bool volumeGesture;
@@ -52,6 +54,8 @@ class AppSettings {
   AppSettings copyWith({
     AppThemeMode? themeMode,
     Color? accentColor,
+    Color? accentColorSecondary,
+    bool clearAccentColorSecondary = false,
     int? skipDuration,
     bool? brightnessGesture,
     bool? volumeGesture,
@@ -68,6 +72,9 @@ class AppSettings {
     return AppSettings(
       themeMode: themeMode ?? this.themeMode,
       accentColor: accentColor ?? this.accentColor,
+      accentColorSecondary: clearAccentColorSecondary
+          ? null
+          : (accentColorSecondary ?? this.accentColorSecondary),
       skipDuration: skipDuration ?? this.skipDuration,
       brightnessGesture: brightnessGesture ?? this.brightnessGesture,
       volumeGesture: volumeGesture ?? this.volumeGesture,
@@ -97,10 +104,14 @@ class SettingsNotifier extends Notifier<AppSettings> {
     final themeModeIdx = prefs.getInt(AppConstants.keyThemeMode) ?? 0;
     final accentValue = prefs.getInt(AppConstants.keyAccentColor) ??
         AppColors.accentViolet.toARGB32();
+    final accentSecondaryValue =
+        prefs.getInt(AppConstants.keyAccentColorSecondary);
     return AppSettings(
       themeMode: AppThemeMode.values[
           themeModeIdx.clamp(0, AppThemeMode.values.length - 1)],
       accentColor: Color(accentValue),
+      accentColorSecondary:
+          accentSecondaryValue != null ? Color(accentSecondaryValue) : null,
       skipDuration: prefs.getInt(AppConstants.keySkipDuration) ?? 10,
       brightnessGesture:
           prefs.getBool(AppConstants.keyBrightnessGesture) ?? true,
@@ -129,9 +140,19 @@ class SettingsNotifier extends Notifier<AppSettings> {
     state = state.copyWith(themeMode: mode);
   }
 
-  void setAccentColor(Color color) {
-    _prefs.setInt(AppConstants.keyAccentColor, color.toARGB32());
-    state = state.copyWith(accentColor: color);
+  void setAccentPreset(AccentPreset preset) {
+    _prefs.setInt(AppConstants.keyAccentColor, preset.primary.toARGB32());
+    if (preset.secondary != null) {
+      _prefs.setInt(
+          AppConstants.keyAccentColorSecondary, preset.secondary!.toARGB32());
+    } else {
+      _prefs.remove(AppConstants.keyAccentColorSecondary);
+    }
+    state = state.copyWith(
+      accentColor: preset.primary,
+      accentColorSecondary: preset.secondary,
+      clearAccentColorSecondary: preset.secondary == null,
+    );
   }
 
   void setSkipDuration(int seconds) {

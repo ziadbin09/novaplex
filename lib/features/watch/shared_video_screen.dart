@@ -572,7 +572,7 @@ class _ShareSheet extends StatelessWidget {
                     }
                   },
                   style: FilledButton.styleFrom(
-                    backgroundColor: colors.accent,
+                    backgroundColor: colors.accentSecondary,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     padding: const EdgeInsets.symmetric(vertical: 12),

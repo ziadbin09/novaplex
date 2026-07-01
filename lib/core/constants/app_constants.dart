@@ -26,6 +26,7 @@ class AppConstants {
   // Storage keys
   static const keyThemeMode = 'theme_mode';
   static const keyAccentColor = 'accent_color';
+  static const keyAccentColorSecondary = 'accent_color_secondary';
   static const keySkipDuration = 'skip_duration';
   static const keyDefaultZoom = 'default_zoom';
   static const keyBrightnessGesture = 'gesture_brightness';
