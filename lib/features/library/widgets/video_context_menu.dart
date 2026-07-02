@@ -138,14 +138,11 @@ class _VideoContextMenu extends StatelessWidget {
             title: Text('Share', style: context.text.bodyLarge),
             onTap: () async {
               Navigator.of(context).pop();
-              try {
-                await ShareChannel.shareVideo(video.id);
-              } catch (e) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Share failed: $e')),
-                  );
-                }
+              final ok = await ShareChannel.shareVideo(video.id);
+              if (!ok && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Could not share this video')),
+                );
               }
             },
           ),

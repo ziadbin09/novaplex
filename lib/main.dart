@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'core/constants/app_constants.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'core/utils/nav_debounce.dart';
 import 'data/models/video_file.dart';
 import 'data/repositories/settings_repository.dart';
 import 'data/services/intent_channel.dart';
@@ -62,6 +63,7 @@ void _wireOpenWithIntents() {
   }
 
   void handleUri(String uri) {
+    if (!NavDebounce.allow()) return;
     final watchId = _extractWatchId(uri);
     if (watchId != null) {
       appRouter.push('/watch/$watchId');

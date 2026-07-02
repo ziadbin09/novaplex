@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/duration_formatter.dart';
+import '../../core/utils/nav_debounce.dart';
 import '../../data/models/video_file.dart';
 import '../../data/repositories/media_repository.dart';
 import '../../data/repositories/playlist_repository.dart';
@@ -93,8 +94,11 @@ class PlaylistDetailScreen extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 4),
                         child: FilledButton.icon(
-                          onPressed: () =>
-                              context.push('/player', extra: videos.first),
+                          onPressed: () {
+                            if (NavDebounce.allow()) {
+                              context.push('/player', extra: videos.first);
+                            }
+                          },
                           icon: const Icon(Icons.play_arrow_rounded),
                           label: const Text('Play All'),
                           style: FilledButton.styleFrom(
@@ -115,8 +119,11 @@ class PlaylistDetailScreen extends ConsumerWidget {
                             return _PlaylistTile(
                               video: v,
                               watchPercent: entry?.watchPercent ?? 0,
-                              onTap: () =>
-                                  ctx.push('/player', extra: v),
+                              onTap: () {
+                                if (NavDebounce.allow()) {
+                                  ctx.push('/player', extra: v);
+                                }
+                              },
                               onRemove: () => ref
                                   .read(playlistsProvider.notifier)
                                   .removeVideo(playlistId, v.id),

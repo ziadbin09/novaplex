@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/duration_formatter.dart';
+import '../../core/utils/nav_debounce.dart';
 import '../../data/models/download_task.dart';
 import '../../data/models/video_file.dart';
 import '../../data/repositories/download_repository.dart';
@@ -273,7 +274,11 @@ class _CompletedTile extends StatelessWidget {
           ),
           trailing: Icon(Icons.play_circle_outline,
               color: colors.textSecondary, size: 24),
-          onTap: () => context.push('/player', extra: _toVideo()),
+          onTap: () {
+            if (NavDebounce.allow()) {
+              context.push('/player', extra: _toVideo());
+            }
+          },
         ),
       ).animate().fadeIn(duration: 150.ms),
     );

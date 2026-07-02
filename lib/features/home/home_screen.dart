@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/nav_debounce.dart';
 import '../../data/models/video_file.dart';
 import '../../data/models/watch_entry.dart';
 import '../../data/repositories/watch_history_repository.dart';
@@ -38,6 +39,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void _playUrl() {
     final url = _urlController.text.trim();
     if (url.isEmpty) return;
+    if (!NavDebounce.allow()) return;
     final watchId = _extractWatchId(url);
     if (watchId != null) {
       context.push('/watch/$watchId');
@@ -552,7 +554,11 @@ class _RecentChip extends StatelessWidget {
     );
 
     return GestureDetector(
-      onTap: () => context.push('/player', extra: video),
+      onTap: () {
+        if (NavDebounce.allow()) {
+          context.push('/player', extra: video);
+        }
+      },
       child: Container(
         width: 130,
         margin: const EdgeInsets.only(right: 10),

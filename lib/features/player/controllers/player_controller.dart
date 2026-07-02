@@ -61,6 +61,18 @@ class PlayerController extends ChangeNotifier {
   Timer? _sleepTimer;
   StreamSubscription<bool>? _completedSub;
 
+  /// True once dispose() has run. Every notifyListeners() call and every
+  /// resumed-after-await codepath must check this first — the controller's
+  /// async init and several setters await a platform call before notifying,
+  /// and the screen can be disposed while that await is in flight.
+  bool _disposed = false;
+
+  /// Safe replacement for notifyListeners() — a no-op once disposed instead
+  /// of throwing "A ChangeNotifier was used after being disposed".
+  void _notify() {
+    if (!_disposed) notifyListeners();
+  }
+
   Future<void> _init(bool hardwareDecode, List<double> eqBands) async {
     player = Player();
     // Hardware decoding renders a frozen frame on emulators (BlueStacks) —
@@ -72,13 +84,17 @@ class PlayerController extends ChangeNotifier {
       ),
     );
     await WakelockPlus.enable();
+    if (_disposed) return;
     final platform = player.platform;
     if (platform is NativePlayer) {
       await platform.setProperty('volume-max', '200');
     }
+    if (_disposed) return;
     // Apply persisted EQ on startup
     await setEq(eqBands);
+    if (_disposed) return;
     await player.open(Media(video.path));
+    if (_disposed) return;
     _startHideTimer();
     // Listen for video end to handle "end of video" sleep timer
     _completedSub = player.stream.completed.listen((completed) {
@@ -88,7 +104,7 @@ class PlayerController extends ChangeNotifier {
         cancelSleepTimer();
       }
     });
-    notifyListeners();
+    _notify();
   }
 
   // ── Controls visibility ──────────────────────────────────────────────────
@@ -97,21 +113,21 @@ class PlayerController extends ChangeNotifier {
     if (isLocked) return;
     showControls = !showControls;
     if (showControls) _startHideTimer();
-    notifyListeners();
+    _notify();
   }
 
   void showControlsTemporary() {
     if (isLocked) return;
     showControls = true;
     _startHideTimer();
-    notifyListeners();
+    _notify();
   }
 
   void _startHideTimer() {
     _hideTimer?.cancel();
     _hideTimer = Timer(const Duration(seconds: 3), () {
       showControls = false;
-      notifyListeners();
+      _notify();
     });
   }
 
@@ -121,19 +137,19 @@ class PlayerController extends ChangeNotifier {
 
   void setZoomMode(ZoomMode mode) {
     zoomMode = mode;
-    notifyListeners();
+    _notify();
   }
 
   void setPlaybackSpeed(double speed) {
     playbackSpeed = speed;
     player.setRate(speed);
-    notifyListeners();
+    _notify();
   }
 
   void toggleLock() {
     isLocked = !isLocked;
     showControls = !isLocked;
-    notifyListeners();
+    _notify();
   }
 
   /// Lock screen rotation to the current orientation, or unlock.
@@ -155,31 +171,33 @@ class PlayerController extends ChangeNotifier {
         DeviceOrientation.landscapeRight,
       ]);
     }
-    notifyListeners();
+    if (_disposed) return;
+    _notify();
   }
 
   /// Pinch-to-zoom: set absolute scale, clamped to a sensible range.
   void setVideoScale(double scale) {
     videoScale = scale.clamp(0.5, 3.0);
-    notifyListeners();
+    _notify();
   }
 
   void resetVideoScale() {
     videoScale = 1.0;
-    notifyListeners();
+    _notify();
   }
 
   void toggleLoop() {
     loopMode = loopMode == LoopMode.off ? LoopMode.loopOne : LoopMode.off;
     player.setPlaylistMode(
         loopMode == LoopMode.loopOne ? PlaylistMode.single : PlaylistMode.none);
-    notifyListeners();
+    _notify();
   }
 
   /// Seek to [position] once the player has buffered enough.
   Future<void> resumeTo(Duration position) async {
     if (position <= Duration.zero) return;
     await Future.delayed(const Duration(milliseconds: 600));
+    if (_disposed) return;
     await player.seek(position);
   }
 
@@ -187,7 +205,7 @@ class PlayerController extends ChangeNotifier {
   void setSubtitleTrack(SubtitleTrack track) {
     currentSubtitle = track;
     player.setSubtitleTrack(track);
-    notifyListeners();
+    _notify();
   }
 
   Future<void> toggleFullscreen() async {
@@ -206,7 +224,8 @@ class PlayerController extends ChangeNotifier {
       ]);
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }
-    notifyListeners();
+    if (_disposed) return;
+    _notify();
   }
 
   void seekBy(int seconds) {
@@ -239,7 +258,7 @@ class PlayerController extends ChangeNotifier {
       clearAbRepeat();
       return;
     }
-    notifyListeners();
+    _notify();
   }
 
   void clearAbRepeat() {
@@ -247,7 +266,7 @@ class PlayerController extends ChangeNotifier {
     abPointB = null;
     _abSub?.cancel();
     _abSub = null;
-    notifyListeners();
+    _notify();
   }
 
   // ── Volume boost & stats ─────────────────────────────────────────────────
@@ -256,12 +275,12 @@ class PlayerController extends ChangeNotifier {
   void setVolumeBoost(double boost) {
     volumeBoost = boost.clamp(0.0, 1.0);
     player.setVolume(100 + volumeBoost * 100);
-    notifyListeners();
+    _notify();
   }
 
   void toggleStats() {
     showStats = !showStats;
-    notifyListeners();
+    _notify();
   }
 
   // ── Equalizer ────────────────────────────────────────────────────────────
@@ -296,7 +315,8 @@ class PlayerController extends ChangeNotifier {
       await platform.setProperty(
           'sub-delay', subtitleDelay.toStringAsFixed(1));
     }
-    notifyListeners();
+    if (_disposed) return;
+    _notify();
   }
 
   Future<void> setAudioDelay(double seconds) async {
@@ -306,7 +326,8 @@ class PlayerController extends ChangeNotifier {
       await platform.setProperty(
           'audio-delay', audioDelay.toStringAsFixed(1));
     }
-    notifyListeners();
+    if (_disposed) return;
+    _notify();
   }
 
   // ── Sleep timer ──────────────────────────────────────────────────────────
@@ -325,29 +346,30 @@ class PlayerController extends ChangeNotifier {
       } else {
         sleepTimerRemaining = next;
       }
-      notifyListeners();
+      _notify();
     });
-    notifyListeners();
+    _notify();
   }
 
   void setSleepTimerEndOfVideo() {
     _sleepOnVideoEnd = true;
     sleepTimerRemaining = null;
     _sleepTimer?.cancel();
-    notifyListeners();
+    _notify();
   }
 
   void cancelSleepTimer() {
     _sleepOnVideoEnd = false;
     sleepTimerRemaining = null;
     _sleepTimer?.cancel();
-    notifyListeners();
+    _notify();
   }
 
   // ── Dispose ──────────────────────────────────────────────────────────────
 
   @override
   void dispose() {
+    _disposed = true;
     _hideTimer?.cancel();
     _sleepTimer?.cancel();
     _abSub?.cancel();

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/duration_formatter.dart';
+import '../../../core/utils/nav_debounce.dart';
 import '../../../data/models/watch_entry.dart';
 import '../../../data/models/video_file.dart';
 import '../../../data/repositories/media_repository.dart';
@@ -76,7 +77,11 @@ class ContinueWatchingRow extends ConsumerWidget {
                 itemBuilder: (ctx, i) => _ContinueCard(
                   entry: items[i].entry,
                   video: items[i].video!,
-                  onTap: () => ctx.push('/player', extra: items[i].video),
+                  onTap: () {
+                    if (NavDebounce.allow()) {
+                      ctx.push('/player', extra: items[i].video);
+                    }
+                  },
                 ),
               ),
             ),

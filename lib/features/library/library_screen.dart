@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/duration_formatter.dart';
+import '../../core/utils/nav_debounce.dart';
 import '../../data/repositories/media_repository.dart';
 import '../../data/services/intent_channel.dart';
 import '../../data/repositories/watch_history_repository.dart';
@@ -146,7 +147,7 @@ void _showOpenSheet(BuildContext context) {
             onTap: () async {
               Navigator.pop(sheetCtx);
               final url = await showPlayUrlDialog(context);
-              if (url != null && context.mounted) {
+              if (url != null && context.mounted && NavDebounce.allow()) {
                 context.push('/player', extra: _externalVideo(url, url));
               }
             },
@@ -159,7 +160,7 @@ void _showOpenSheet(BuildContext context) {
             onTap: () async {
               Navigator.pop(sheetCtx);
               final uri = await IntentChannel.pickVideo();
-              if (uri != null && context.mounted) {
+              if (uri != null && context.mounted && NavDebounce.allow()) {
                 final name = Uri.decodeComponent(uri)
                     .split(RegExp(r'[/:]'))
                     .last;
@@ -423,12 +424,20 @@ class _VideoList extends ConsumerWidget {
               return VideoCard(
                 video: v,
                 watchPercent: entry?.watchPercent ?? 0,
-                onTap: () => context.push('/player', extra: v),
+                onTap: () {
+                  if (NavDebounce.allow()) {
+                    context.push('/player', extra: v);
+                  }
+                },
                 onLongPress: () => showVideoContextMenu(
                   context: context,
                   ref: ref,
                   video: v,
-                  onPlay: () => context.push('/player', extra: v),
+                  onPlay: () {
+                    if (NavDebounce.allow()) {
+                      context.push('/player', extra: v);
+                    }
+                  },
                 ),
               );
             },
@@ -441,12 +450,20 @@ class _VideoList extends ConsumerWidget {
             final v = videos[i];
             return _ListTile(
               video: v,
-              onTap: () => context.push('/player', extra: v),
+              onTap: () {
+                if (NavDebounce.allow()) {
+                  context.push('/player', extra: v);
+                }
+              },
               onLongPress: () => showVideoContextMenu(
                 context: context,
                 ref: ref,
                 video: v,
-                onPlay: () => context.push('/player', extra: v),
+                onPlay: () {
+                  if (NavDebounce.allow()) {
+                    context.push('/player', extra: v);
+                  }
+                },
               ),
             );
           },

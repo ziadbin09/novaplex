@@ -293,6 +293,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
   }
 
   Future<void> _saveProgress() async {
+    if (!mounted) return;
     final pos = _controller.player.state.position;
     final dur = _controller.player.state.duration;
     if (dur <= Duration.zero) return;

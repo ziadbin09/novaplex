@@ -54,8 +54,10 @@ class _SharedVideoScreenState extends ConsumerState<SharedVideoScreen> {
   }
 
   void _goFullscreen() {
-    _controller.player.pause();
-    context.push('/player', extra: widget.video);
+    // Replace (not push) this route so the embedded player's controller —
+    // and its native decoder — is disposed via this screen's own dispose()
+    // instead of staying alive underneath a second PlayerScreen/decoder.
+    context.pushReplacement('/player', extra: widget.video);
   }
 
   void _share() {

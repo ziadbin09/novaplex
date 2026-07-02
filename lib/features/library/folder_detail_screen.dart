@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/duration_formatter.dart';
+import '../../core/utils/nav_debounce.dart';
 import '../../data/models/video_file.dart';
 import '../../data/repositories/media_repository.dart';
 import '../../data/repositories/watch_history_repository.dart';
@@ -61,8 +62,11 @@ class FolderDetailScreen extends ConsumerWidget {
                       ),
                       icon: const Icon(Icons.play_arrow_rounded, size: 18),
                       label: const Text('Play All'),
-                      onPressed: () =>
-                          context.push('/player', extra: videos.first),
+                      onPressed: () {
+                        if (NavDebounce.allow()) {
+                          context.push('/player', extra: videos.first);
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -79,12 +83,20 @@ class FolderDetailScreen extends ConsumerWidget {
                     return _FolderVideoTile(
                       video: v,
                       watchPercent: entry?.watchPercent ?? 0,
-                      onTap: () => context.push('/player', extra: v),
+                      onTap: () {
+                        if (NavDebounce.allow()) {
+                          context.push('/player', extra: v);
+                        }
+                      },
                       onLongPress: () => showVideoContextMenu(
                         context: context,
                         ref: ref,
                         video: v,
-                        onPlay: () => context.push('/player', extra: v),
+                        onPlay: () {
+                          if (NavDebounce.allow()) {
+                            context.push('/player', extra: v);
+                          }
+                        },
                       ),
                     );
                   },

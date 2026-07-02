@@ -96,6 +96,12 @@ class DownloadManager extends Notifier<List<DownloadTask>> {
   }
 
   Future<void> _start(DownloadTask task) async {
+    // Guard against double-tap on resume/retry: if a download for this task
+    // is already in flight, starting a second one would open two concurrent
+    // writes to the same file (corruption) and leak the first HttpClient.
+    if (_subs.containsKey(task.id) || _httpClients.containsKey(task.id)) {
+      return;
+    }
     final file = File(task.filePath);
     var startByte = 0;
     if (await file.exists()) {
