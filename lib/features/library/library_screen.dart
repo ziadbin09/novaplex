@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/duration_formatter.dart';
 import '../../core/utils/nav_debounce.dart';
+import '../../shared/widgets/ad_banner.dart';
 import '../../data/repositories/media_repository.dart';
 import '../../data/services/intent_channel.dart';
 import '../../data/repositories/watch_history_repository.dart';
@@ -108,8 +109,10 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen>
             _TopBar(isGrid: isGrid, ref: ref),
             _SearchBar(ref: ref),
             _SortBar(ref: ref),
+            AdBanner.small(margin: const EdgeInsets.only(bottom: 8)),
             const ContinueWatchingRow(),
             Expanded(child: _VideoList(isGrid: isGrid)),
+            AdBanner.small2(margin: const EdgeInsets.symmetric(vertical: 6)),
           ],
         ),
       ),

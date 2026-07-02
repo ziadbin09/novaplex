@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/constants/app_constants.dart';
@@ -11,6 +12,8 @@ import 'data/models/video_file.dart';
 import 'data/repositories/settings_repository.dart';
 import 'data/services/intent_channel.dart';
 import 'data/services/device_channel.dart';
+import 'data/services/ads/ad_manager.dart';
+import 'data/services/ads/app_open_ad_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +36,18 @@ void main() async {
     final emulator = await DeviceChannel.isLikelyEmulator();
     await prefs.setBool(AppConstants.keyHardwareDecode, !emulator);
   }
+
+  // Initialize AdMob, then preload the first ads. Non-blocking: the UI runs
+  // immediately and ads populate as they finish loading.
+  MobileAds.instance.initialize().then((_) {
+    AdManager.instance.init();
+    WidgetsBinding.instance.addObserver(AppOpenAdManager.instance);
+    AppOpenAdManager.instance.loadAd();
+    // Cold-start App Open ad: show once ready, ignoring the resume cooldown.
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      AppOpenAdManager.instance.showIfAvailable(respectCooldown: false);
+    });
+  });
 
   runApp(
     ProviderScope(

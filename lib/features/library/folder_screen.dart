@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/duration_formatter.dart';
+import '../../shared/widgets/ad_banner.dart';
 import '../../data/repositories/media_repository.dart';
 import '../../data/repositories/privacy_repository.dart';
 import 'widgets/pin_dialog.dart';
@@ -43,6 +44,7 @@ class FolderScreen extends ConsumerWidget {
                 ],
               ),
             ),
+            AdBanner.small(margin: const EdgeInsets.only(bottom: 8)),
             Expanded(
               child: foldersAsync.when(
                 loading: () =>
@@ -113,6 +115,7 @@ class FolderScreen extends ConsumerWidget {
                 ),
               ),
             ),
+            AdBanner.small2(margin: const EdgeInsets.symmetric(vertical: 6)),
           ],
         ),
       ),

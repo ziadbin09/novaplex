@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/nav_debounce.dart';
+import '../../shared/widgets/ad_banner.dart';
 import '../../data/models/video_file.dart';
 import '../../data/models/watch_entry.dart';
 import '../../data/repositories/watch_history_repository.dart';
@@ -86,10 +87,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(child: _buildHero(colors)),
+            SliverToBoxAdapter(child: AdBanner.small()),
             SliverToBoxAdapter(child: _buildDivider(colors)),
             SliverToBoxAdapter(child: _buildSectionLabel('Quick access', colors)),
             SliverToBoxAdapter(child: _buildLibraryCard(colors)),
             SliverToBoxAdapter(child: _buildUrlCard(colors)),
+            SliverToBoxAdapter(child: AdBanner.large()),
             SliverToBoxAdapter(child: _buildDivider(colors)),
             if (recent.isNotEmpty) ...[
               SliverToBoxAdapter(child: _buildRecentHeader(colors)),
@@ -97,6 +100,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ] else ...[
               SliverToBoxAdapter(child: _buildEmptyRecent(colors)),
             ],
+            SliverToBoxAdapter(child: AdBanner.small2()),
             const SliverToBoxAdapter(child: SizedBox(height: 24)),
           ],
         ),

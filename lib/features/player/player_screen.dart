@@ -27,6 +27,7 @@ import 'widgets/video_info_sheet.dart';
 import 'widgets/equalizer_sheet.dart';
 import 'widgets/casting_overlay.dart';
 import 'widgets/buffering_indicator.dart';
+import '../../data/services/ads/ad_manager.dart';
 
 class PlayerScreen extends ConsumerStatefulWidget {
   const PlayerScreen({super.key, required this.video});
@@ -84,6 +85,23 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
     _startMediaSession();
     _watchForCompletion();
     _initCast();
+    _maybeShowPreRollAd();
+  }
+
+  /// Pre-roll interstitial before regular video playback. Skipped once when
+  /// arriving from a shared-link video's fullscreen button (a rewarded ad
+  /// already ran on the stream screen).
+  void _maybeShowPreRollAd() {
+    if (AdManager.instance.suppressNextVideoInterstitial) {
+      AdManager.instance.suppressNextVideoInterstitial = false;
+      return;
+    }
+    AdManager.instance.showInterstitial(
+      onShow: () => _controller.player.pause(),
+      onDone: () {
+        if (mounted) _controller.player.play();
+      },
+    );
   }
 
   Future<void> _initCast() async {

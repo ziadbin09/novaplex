@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_theme.dart';
+import '../../shared/widgets/ad_banner.dart';
 import '../../data/models/video_file.dart';
 import '../../data/services/video_api_service.dart';
 
@@ -246,6 +247,8 @@ class _InfoBody extends StatelessWidget {
                         horizontal: 20, vertical: 12),
                   ),
                 ),
+                const SizedBox(height: 20),
+                Center(child: AdBanner.large()),
               ],
             ),
           ),

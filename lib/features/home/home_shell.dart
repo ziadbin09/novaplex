@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
+import '../../data/services/ads/ad_manager.dart';
 
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key, required this.child});
@@ -77,6 +78,7 @@ class _HomeShellState extends State<HomeShell> {
           child: NavigationBar(
             selectedIndex: _selectedIndex(context),
             onDestinationSelected: (i) {
+              final changingTab = i != _selectedIndex(context);
               switch (i) {
                 case 0:
                   context.go('/home');
@@ -89,6 +91,8 @@ class _HomeShellState extends State<HomeShell> {
                 case 4:
                   context.go('/settings');
               }
+              // Interstitial cadence: skip 1 switch, show on the next, repeat.
+              if (changingTab) AdManager.instance.onTabSwitched();
             },
             destinations: const [
               NavigationDestination(

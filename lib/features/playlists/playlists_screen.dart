@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
+import '../../shared/widgets/ad_banner.dart';
 import '../../data/repositories/playlist_repository.dart';
 
 class PlaylistsScreen extends ConsumerWidget {
@@ -37,6 +38,7 @@ class PlaylistsScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 8),
+            AdBanner.small(margin: const EdgeInsets.only(bottom: 8)),
             // List
             Expanded(
               child: playlists.isEmpty
@@ -109,6 +111,7 @@ class PlaylistsScreen extends ConsumerWidget {
                       },
                     ),
             ),
+            AdBanner.small2(margin: const EdgeInsets.symmetric(vertical: 6)),
           ],
         ),
       ),

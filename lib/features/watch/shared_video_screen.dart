@@ -12,6 +12,8 @@ import '../../data/models/video_file.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../player/controllers/player_controller.dart';
 import '../player/widgets/buffering_indicator.dart';
+import '../../data/services/ads/ad_manager.dart';
+import '../../shared/widgets/ad_banner.dart';
 
 class SharedVideoScreen extends ConsumerStatefulWidget {
   const SharedVideoScreen({super.key, required this.video});
@@ -32,6 +34,19 @@ class _SharedVideoScreenState extends ConsumerState<SharedVideoScreen> {
     final settings = ref.read(settingsProvider);
     _controller = PlayerController(widget.video, settings.hardwareDecode);
     _scheduleHide();
+    _showRewardedGate();
+  }
+
+  /// Shared-link videos are a "reward": show a rewarded ad, keeping playback
+  /// paused until it closes. Fail-open — if no ad is ready, playback proceeds
+  /// so the user is never stuck behind a missing ad.
+  void _showRewardedGate() {
+    _controller.player.pause();
+    AdManager.instance.showRewarded(
+      onDone: () {
+        if (mounted) _controller.player.play();
+      },
+    );
   }
 
   @override
@@ -54,6 +69,9 @@ class _SharedVideoScreenState extends ConsumerState<SharedVideoScreen> {
   }
 
   void _goFullscreen() {
+    // The rewarded ad already ran on this screen, so skip the fullscreen
+    // player's pre-roll interstitial this once.
+    AdManager.instance.suppressNextVideoInterstitial = true;
     // Replace (not push) this route so the embedded player's controller —
     // and its native decoder — is disposed via this screen's own dispose()
     // instead of staying alive underneath a second PlayerScreen/decoder.
@@ -213,6 +231,9 @@ class _SharedVideoScreenState extends ConsumerState<SharedVideoScreen> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 16),
+                    Center(child: AdBanner.large()),
+                    Center(child: AdBanner.small()),
                   ],
                 ),
               ),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
+import '../../shared/widgets/ad_banner.dart';
 import '../../data/repositories/privacy_repository.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../library/widgets/pin_dialog.dart';
@@ -77,6 +78,8 @@ class SettingsScreen extends ConsumerWidget {
               ]),
             ),
 
+            SliverToBoxAdapter(child: AdBanner.large()),
+
             // --- GESTURES ---
             _SectionHeader(title: 'Gestures'),
             SliverToBoxAdapter(
@@ -118,6 +121,8 @@ class SettingsScreen extends ConsumerWidget {
                 _SubtitleColorTile(settings: settings, notifier: notifier),
               ]),
             ),
+
+            SliverToBoxAdapter(child: AdBanner.small()),
 
             // --- PRIVACY ---
             _SectionHeader(title: 'Privacy'),
