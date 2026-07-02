@@ -42,11 +42,8 @@ void main() async {
   MobileAds.instance.initialize().then((_) {
     AdManager.instance.init();
     WidgetsBinding.instance.addObserver(AppOpenAdManager.instance);
-    AppOpenAdManager.instance.loadAd();
-    // Cold-start App Open ad: show once ready, ignoring the resume cooldown.
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      AppOpenAdManager.instance.showIfAvailable(respectCooldown: false);
-    });
+    // Cold-start App Open ad shows itself the moment it finishes loading.
+    AppOpenAdManager.instance.loadColdStartAd();
   });
 
   runApp(

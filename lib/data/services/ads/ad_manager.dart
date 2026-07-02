@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'ad_ids.dart';
+import 'ad_state.dart';
 
 /// Central manager for full-screen ads (interstitial + rewarded).
 ///
@@ -74,12 +75,15 @@ class AdManager {
     _lastInterstitial = now;
 
     ad.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (_) => AdState.onAdShown(),
       onAdDismissedFullScreenContent: (ad) {
+        AdState.onAdDismissed();
         ad.dispose();
         _loadInterstitial();
         onDone?.call();
       },
       onAdFailedToShowFullScreenContent: (ad, err) {
+        AdState.onAdDismissed();
         ad.dispose();
         _loadInterstitial();
         onDone?.call();
@@ -136,12 +140,15 @@ class AdManager {
     _rewarded = null;
 
     ad.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (_) => AdState.onAdShown(),
       onAdDismissedFullScreenContent: (ad) {
+        AdState.onAdDismissed();
         ad.dispose();
         _loadRewarded();
         onDone?.call();
       },
       onAdFailedToShowFullScreenContent: (ad, err) {
+        AdState.onAdDismissed();
         ad.dispose();
         _loadRewarded();
         onDone?.call();
