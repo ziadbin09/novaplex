@@ -199,7 +199,7 @@ class DownloadManager extends Notifier<List<DownloadTask>> {
       );
       _subs[task.id] = sub;
     } catch (e) {
-      _httpClients.remove(task.id);
+      _httpClients.remove(task.id)?.close(force: true);
       _update(task.id,
           (t) => t.copyWith(status: DownloadStatus.failed, error: e.toString()));
       _persist();

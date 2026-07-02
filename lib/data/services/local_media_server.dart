@@ -36,10 +36,16 @@ class LocalMediaServer {
     final ip = await _lanAddress();
     if (ip == null) return null;
 
-    _server = await HttpServer.bind(InternetAddress.anyIPv4, 0);
-    _server!.listen(_handleRequest);
-
-    return 'http://$ip:${_server!.port}/media';
+    try {
+      _server = await HttpServer.bind(InternetAddress.anyIPv4, 0);
+      _server!.listen(_handleRequest);
+      return 'http://$ip:${_server!.port}/media';
+    } catch (_) {
+      // Don't leave a bound-but-unusable socket orphaned if listen() or
+      // anything after bind() fails.
+      await stop();
+      return null;
+    }
   }
 
   Future<void> _handleRequest(HttpRequest request) async {
@@ -114,7 +120,9 @@ class LocalMediaServer {
   }
 
   Future<void> stop() async {
-    await _server?.close(force: true);
+    try {
+      await _server?.close(force: true);
+    } catch (_) {}
     _server = null;
     _filePath = null;
   }

@@ -367,6 +367,16 @@ class PlayerController extends ChangeNotifier {
 
   // ── Dispose ──────────────────────────────────────────────────────────────
 
+  /// Runs a fire-and-forget async cleanup step without letting a failure
+  /// propagate as an unhandled Future exception (which Flutter reports to
+  /// crash analytics even though nothing visibly breaks) or block the
+  /// other cleanup steps in dispose().
+  static Future<void> _safeAsync(Future<void> Function() action) async {
+    try {
+      await action();
+    } catch (_) {}
+  }
+
   @override
   void dispose() {
     _disposed = true;
@@ -374,14 +384,14 @@ class PlayerController extends ChangeNotifier {
     _sleepTimer?.cancel();
     _abSub?.cancel();
     _completedSub?.cancel();
-    player.dispose();
-    WakelockPlus.disable();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    _safeAsync(() => player.dispose());
+    _safeAsync(() => WakelockPlus.disable());
+    _safeAsync(() => SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]));
+    _safeAsync(() => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge));
     super.dispose();
   }
 }
