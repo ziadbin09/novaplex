@@ -11,6 +11,7 @@ import '../../core/utils/duration_formatter.dart';
 import '../../data/models/video_file.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../player/controllers/player_controller.dart';
+import '../player/widgets/buffering_indicator.dart';
 
 class SharedVideoScreen extends ConsumerStatefulWidget {
   const SharedVideoScreen({super.key, required this.video});
@@ -117,6 +118,7 @@ class _SharedVideoScreenState extends ConsumerState<SharedVideoScreen> {
                       controller: _controller.videoController,
                       controls: NoVideoControls,
                     ),
+                    BufferingIndicator(player: _controller.player),
                     AnimatedOpacity(
                       opacity: _showControls ? 1.0 : 0.0,
                       duration: const Duration(milliseconds: 200),

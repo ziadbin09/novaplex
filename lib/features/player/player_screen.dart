@@ -26,6 +26,7 @@ import 'widgets/sync_sheet.dart';
 import 'widgets/video_info_sheet.dart';
 import 'widgets/equalizer_sheet.dart';
 import 'widgets/casting_overlay.dart';
+import 'widgets/buffering_indicator.dart';
 
 class PlayerScreen extends ConsumerStatefulWidget {
   const PlayerScreen({super.key, required this.video});
@@ -405,6 +406,7 @@ class _PlayerScreenState extends ConsumerState<PlayerScreen> {
               ),
             ),
           ),
+          BufferingIndicator(player: _controller.player),
           GestureDetectorLayer(
             controller: _controller,
             enableBrightness: settings.brightnessGesture,
