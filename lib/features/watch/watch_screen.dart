@@ -157,20 +157,40 @@ class _InfoBody extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Thumbnail placeholder
+                // Thumbnail placeholder — brand gradient with a play badge
                 AspectRatio(
                   aspectRatio: 16 / 9,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: colors.surface,
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          colors.accent,
+                          colors.bg,
+                          colors.accentSecondary ?? colors.accent,
+                        ],
+                        stops: const [0.0, 0.55, 1.0],
+                      ),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: colors.border),
                     ),
                     child: Center(
-                      child: Icon(
-                        Icons.movie_rounded,
-                        size: 72,
-                        color: colors.textSecondary.withValues(alpha: 0.5),
+                      child: Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          color: colors.bg.withValues(alpha: 0.35),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.5),
+                            width: 1.5,
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.play_arrow_rounded,
+                          color: Colors.white,
+                          size: 26,
+                        ),
                       ),
                     ),
                   ),
